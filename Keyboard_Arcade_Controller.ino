@@ -26,8 +26,8 @@ char TabKeysPlayer2[16] = {'R', 'F', 'D', 'G', '2', '6', 'A', 'S', 'Q', 'W', 'I'
 
 // set Hotkey and shifted Keys
 int Hotkey = TabPinPlayer1[4];
-char TabShiftedKeysP1[16] = {NULL, 'P', KEY_RETURN, KEY_TAB, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
-char TabShiftedKeysP2[16] = {NULL, NULL, NULL, NULL, KEY_ESC, '5', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+char TabShiftedKeysP1[16] = {NULL, 'P', KEY_RETURN, KEY_TAB, '1', NULL, '5', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
+char TabShiftedKeysP2[16] = {NULL, NULL, NULL, NULL, KEY_ESC, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 
 // Initialize CurrentState as "NORMAL". Other state is "SHIFTED" when Hotkey is ON.
 enum States
@@ -57,6 +57,13 @@ void setup() { // initialize the buttons' inputs:
 
 void loop() {
 
+  if (digitalRead(Hotkey) == LOW) {
+    CurrentState = SHIFTED;
+  }
+  else {
+    CurrentState = NORMAL;
+  }
+        
   switch (CurrentState) {
     
     case NORMAL:
@@ -97,11 +104,9 @@ void loop() {
             KeyPressedState4[n] = false;
             Keyboard.release(TabKeysPlayer4[n]);
         }                */
-        if (digitalRead(Hotkey) == LOW) {
-          CurrentState = SHIFTED;
-        }
       }
-      break;
+      delay(20);
+    break;
 
          
     case SHIFTED :
@@ -116,20 +121,18 @@ void loop() {
             Keyboard.release(TabShiftedKeysP1[n]);
         }
 
-        if ((digitalRead(TabPinPlayer2[n]) == LOW) && (KeyPressedState2[n] != NULL) && (!KeyPressedState2[n])) {
+        if ((digitalRead(TabPinPlayer2[n]) == LOW) && (TabShiftedKeysP2[n] != NULL) && (!KeyPressedState2[n])) {
             KeyPressedState2[n] = true;
-            Keyboard.press(KeyPressedState2[n]);
+            Keyboard.press(TabShiftedKeysP2[n]);
         }
-        if ((digitalRead(TabPinPlayer2[n]) == HIGH) && (KeyPressedState2[n] != NULL) && (KeyPressedState2[n])) {
+        if ((digitalRead(TabPinPlayer2[n]) == HIGH) && (TabShiftedKeysP2[n] != NULL) && (KeyPressedState2[n])) {
             KeyPressedState2[n] = false;
-            Keyboard.release(KeyPressedState2[n]);
+            Keyboard.release(TabShiftedKeysP2[n]);
         }  
+      }
+      delay(20);
+    break;
 
-        if (digitalRead(Hotkey) == HIGH) {
-          CurrentState = NORMAL;
-        }
-     break;
-
-    }
   }
-}  
+}
+ 
