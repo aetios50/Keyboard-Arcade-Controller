@@ -7,9 +7,8 @@
   Based on Keyboard and Mouse Control code by Tom Igoe
 */
 
-//#include "Keyboard.h"
-
-#include "HID-Project.h"
+#include "Keyboard.h"
+//#include "HID-Project.h"
 
 unsigned long Index = 0;
 // set pin numbers for each player controls:
